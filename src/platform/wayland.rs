@@ -27,12 +27,30 @@ pub use crate::window::Theme;
 pub trait ActiveEventLoopExtWayland {
     /// True if the [`ActiveEventLoop`] uses Wayland.
     fn is_wayland(&self) -> bool;
+
+    /// The relative pointer motion as the compositor accelerated it (`dx` and `dy` of
+    /// `zwp_relative_pointer_v1.relative_motion`), summed since the last call, in surface-local
+    /// logical pixels. The sum is reset to zero by each call.
+    ///
+    /// [`DeviceEvent::MouseMotion`] keeps carrying the unaccelerated motion. Call this from
+    /// [`ApplicationHandler::device_event`] to read the accelerated motion that arrived with it.
+    ///
+    /// Returns `None` when the [`ActiveEventLoop`] does not use Wayland.
+    ///
+    /// [`DeviceEvent::MouseMotion`]: crate::event::DeviceEvent::MouseMotion
+    /// [`ApplicationHandler::device_event`]: crate::application::ApplicationHandler::device_event
+    fn take_accelerated_pointer_motion(&self) -> Option<(f64, f64)>;
 }
 
 impl ActiveEventLoopExtWayland for ActiveEventLoop {
     #[inline]
     fn is_wayland(&self) -> bool {
         self.p.is_wayland()
+    }
+
+    #[inline]
+    fn take_accelerated_pointer_motion(&self) -> Option<(f64, f64)> {
+        self.p.take_accelerated_pointer_motion()
     }
 }
 

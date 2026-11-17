@@ -39,3 +39,8 @@ The migration guide could reference other migration examples in the current
 changelog entry.
 
 ## Unreleased
+
+### Added
+
+- On Wayland, add `ActiveEventLoopExtWayland::take_accelerated_pointer_motion`, the
+  accelerated relative pointer motion that `DeviceEvent::MouseMotion` does not carry.

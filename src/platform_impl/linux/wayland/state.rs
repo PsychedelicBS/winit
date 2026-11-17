@@ -97,6 +97,10 @@ pub struct WinitState {
     /// Relative pointer.
     pub relative_pointer: Option<RelativePointerState>,
 
+    /// The accelerated relative pointer motion (`dx`, `dy`) summed since the application last
+    /// took it, in surface-local logical pixels.
+    pub accelerated_pointer_motion: (f64, f64),
+
     /// Pointer constraints to handle pointer locking and confining.
     pub pointer_constraints: Option<Arc<PointerConstraintsState>>,
 
@@ -182,6 +186,7 @@ impl WinitState {
             text_input_state: TextInputState::new(globals, queue_handle).ok(),
 
             relative_pointer: RelativePointerState::new(globals, queue_handle).ok(),
+            accelerated_pointer_motion: (0.0, 0.0),
             pointer_constraints: PointerConstraintsState::new(globals, queue_handle)
                 .map(Arc::new)
                 .ok(),

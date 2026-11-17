@@ -899,6 +899,17 @@ impl ActiveEventLoop {
         x11_or_wayland!(match self; Self(evlp) => evlp.listen_device_events(allowed))
     }
 
+    #[cfg(wayland_platform)]
+    #[inline]
+    pub fn take_accelerated_pointer_motion(&self) -> Option<(f64, f64)> {
+        match *self {
+            #[cfg(wayland_platform)]
+            ActiveEventLoop::Wayland(ref evlp) => Some(evlp.take_accelerated_pointer_motion()),
+            #[cfg(x11_platform)]
+            _ => None,
+        }
+    }
+
     #[cfg(feature = "rwh_05")]
     #[inline]
     pub fn raw_display_handle_rwh_05(&self) -> rwh_05::RawDisplayHandle {

@@ -687,6 +687,11 @@ impl ActiveEventLoop {
     #[inline]
     pub fn listen_device_events(&self, _allowed: DeviceEvents) {}
 
+    #[inline]
+    pub fn take_accelerated_pointer_motion(&self) -> (f64, f64) {
+        std::mem::take(&mut self.state.borrow_mut().accelerated_pointer_motion)
+    }
+
     pub(crate) fn create_custom_cursor(&self, cursor: CustomCursorSource) -> RootCustomCursor {
         RootCustomCursor {
             inner: PlatformCustomCursor::Wayland(OnlyCursorImage(Arc::from(cursor.inner.0))),
